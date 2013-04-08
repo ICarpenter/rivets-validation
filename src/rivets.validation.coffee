@@ -1,7 +1,10 @@
 ###
  Rivets Validation
  Framework for providing validation tied to rivets.js
- @Author: Paul Dufour
+ @modified: Ian Carpenter
+ 
+ Forked from rivets validation written by
+ Paul Dufour
  @Company: Brit + Co
 ###
 
@@ -35,11 +38,11 @@ rivets.validation =
 			else
 				return true
 
-		maxlength: (field, value='', requiredLength) ->
+		maxLength: (field, value='', requiredLength) ->
 			if value.length > requiredLength
-				return true
-			else
 				return false
+			else
+				return true
 
 		rangeLength: (field, value='', lengthRange) ->
 			if value.length < lengthRange[0]
@@ -380,7 +383,7 @@ rivets.validation =
 		# If there are remaining inputs that are invalid, kill the submit
 		if @state isnt 'valid'
 			# Trigger change on all the inputs
-			$(@form).find('input:not(:file), select, textarea').trigger('change')
+			$(@form).find('input:not(:file, :radio), select, textarea').trigger('change')
 
 			e.stopImmediatePropagation()
 
@@ -390,7 +393,6 @@ rivets.validation =
 		# Silently validate on first bind
 		model = @model
 		key = @keypath
-
 		@id = _.uniqueId('rivets_validation_')
 
 		@state = 'processing'
@@ -416,7 +418,7 @@ rivets.validation =
 
 		@submitListener = $(el).parents("form").on("submit.#{@id}", $.proxy(@binder.onSubmit, @))
 
-		@dataSubmitListener = $(el).parents("form").find('a[data-submit="true"]').on("click.#{@id}", $.proxy(@binder.onSubmit, @))
+		@dataSubmitListener = $(el).parents("form").find('button[type=submit]').on("click.#{@id}", $.proxy(@binder.onSubmit, @))
 
 	unbind: (el) ->
 		# Cleanup listeners
